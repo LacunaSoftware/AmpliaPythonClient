@@ -26,7 +26,7 @@ class Order(BaseOrder):
             raise Exception('Unsupported type for "parameters" on model for Order: {0}'
                             .format(type(self.__parameters)))
 
-        model = super(self).to_model()
+        model = super(Order, self).to_model()
         model['parameters'] = self.__parameters.to_model() if (self.__parameters is not None) else None
         return model
 

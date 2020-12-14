@@ -1,4 +1,5 @@
 import requests
+import simplejson as json
 
 from .amplia_error import AmpliaError
 from .order_locked_error import OrderLockedError
@@ -34,7 +35,7 @@ class RestClient(object):
         model, headers = self.__get_request_params(data)
         request_url = requests.compat.urljoin(self.__endpoint, url)
         try:
-            response = requests.post(request_url, headers=headers, data=model)
+            response = requests.post(request_url, headers=headers, data=json.dumps(model))
         except Exception:
             raise RestUnreachableError(HttpMethods.POST, url)
 
@@ -53,7 +54,11 @@ class RestClient(object):
         return response.json()
 
     def __get_request_params(self, data=None):
-        headers = {'X-Api-Key': self.__api_key}
+        headers = {
+            'X-Api-Key': self.__api_key,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
         if self.__custom_headers is not None:
             for key in self.__custom_headers:
                 headers[key] = self.__custom_headers[key]

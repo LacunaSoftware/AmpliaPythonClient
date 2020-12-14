@@ -10,11 +10,11 @@ from .rest_client import RestClient
 from .order import Order
 
 TYPED_API_ROUTES = {
-    [CertificateFormats.PKI_BRAZIL]: 'pki-brazil',
-    [CertificateFormats.SSL]: 'ssl',
-    [CertificateFormats.CNB]: 'cnb',
-    [CertificateFormats.CIE]: 'cie',
-    [CertificateFormats.ARISP]: 'arisp',
+    CertificateFormats.PKI_BRAZIL: 'pki-brazil',
+    CertificateFormats.SSL: 'ssl',
+    CertificateFormats.CNB: 'cnb',
+    CertificateFormats.CIE: 'cie',
+    CertificateFormats.ARISP: 'arisp',
 }
 
 
@@ -26,7 +26,7 @@ class AmpliaClient(object):
         self.__rest_client = None
 
     def __get_rest_client(self):
-        if self.__rest_client is not None:
+        if self.__rest_client is None:
             self.__rest_client = RestClient(self.__endpoint, self.__api_key)
         return self.__rest_client
 
@@ -56,7 +56,7 @@ class AmpliaClient(object):
 
         url = "/api/orders/{0}/issue-link".format(order_id)
         if result_url is not None:
-            encoded_url = requests.compat.urlencode(result_url)
+            encoded_url = requests.compat.quote_plus(result_url)
             url += "?returnUrl={0}".format(encoded_url)
 
         return client.get(url)
@@ -109,7 +109,7 @@ class AmpliaClient(object):
     def __set_paginated_search_params(original_uri, search_params):
         return "{0}?q={1}&limit={2}&offset={3}&order={4}".format(
             original_uri,
-            requests.compat.urlencode(search_params.q),
+            requests.compat.quote_plus(search_params.q),
             search_params.limit,
             search_params.offset,
             search_params.order,

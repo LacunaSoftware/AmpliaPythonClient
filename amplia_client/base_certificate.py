@@ -8,7 +8,7 @@ class BaseCertificate(object):
         self.__ca_id = model.get('caId', None)
         self.__alias = model.get('alias', None)
         self.__serial_number = model.get('serialNumber', None)
-        self.__content_base64 = model.get('contentBase64', None)
+        self.__content_base64 = model.get('content', None)
         self.__kind = model.get('kind', None)
         self.__format = model.get('format', None)
 

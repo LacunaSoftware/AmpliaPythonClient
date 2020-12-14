@@ -1,6 +1,6 @@
 import re
 
-from . import ArispRoles
+from .arisp_roles import ArispRoles
 from .certificate_formats import CertificateFormats
 
 
@@ -8,7 +8,7 @@ class CertificateParameters(object):
 
     def __init__(self, model=None):
         if model is not None:
-            self.__format = model.get('format', None)
+            self._format = model.get('format', None)
 
     @staticmethod
     def decode(model):
@@ -34,15 +34,15 @@ class CertificateParameters(object):
 
     @property
     def format(self):
-        return self.__format
+        return self._format
 
     @format.setter
     def format(self, value):
-        self.__format = value
+        self._format = value
 
     def to_model(self):
         return {
-            'format': self.__format,
+            'format': self._format,
         }
 
 
@@ -50,6 +50,8 @@ class PkiBrazilCertificateParameters(CertificateParameters):
 
     def __init__(self, model=None):
         CertificateParameters.__init__(self, model)
+        self._format = CertificateFormats.PKI_BRAZIL
+
         self.__name = None
         self.__email_address = None
         self.__cnpj = None
@@ -210,7 +212,7 @@ class PkiBrazilCertificateParameters(CertificateParameters):
         if self.__cpf is None:
             raise Exception('The "cpf" field was not set')
 
-        model = super(self).to_model()
+        model = super(PkiBrazilCertificateParameters, self).to_model()
         model['name'] = self.__name
         model['emailAddress'] = self.__email_address
         model['cnpj'] = self.__cnpj
@@ -233,6 +235,8 @@ class ArispCertificateParameters(CertificateParameters):
 
     def __init__(self, model=None):
         CertificateParameters.__init__(self, model)
+        self._format = CertificateFormats.ARISP
+
         self.__nome = None
         self.__cpf = None
         self.__funcao = None
@@ -298,7 +302,7 @@ class ArispCertificateParameters(CertificateParameters):
             raise Exception('Unsupported type for "cartorio" field on model for ArispCertificateParameters: {0}'
                             .format(type(self.__cartorio)))
 
-        model = super(self).to_model()
+        model = super(ArispCertificateParameters, self).to_model()
         model['nome'] = self.__nome
         model['cpf'] = self.__cpf
         model['funcao'] = self.__funcao
@@ -536,6 +540,8 @@ class CieCertificateParameters(CertificateParameters):
 
     def __init__(self, model=None):
         CertificateParameters.__init__(self, model)
+        self._format = CertificateFormats.CIE
+
         self.__name = None
         self.__eea = None
         self.__birth_date = None
@@ -668,7 +674,7 @@ class CieCertificateParameters(CertificateParameters):
             raise Exception('Unsupported type for "institution" field on model for CieCertificateParameters: {0}'
                             .format(type(self.__institution)))
 
-        model = super(self).to_model()
+        model = super(CieCertificateParameters, self).to_model()
         model['name'] = self.__name
         model['eea'] = self.__eea
         model['birthDate'] = self.__birth_date
@@ -740,6 +746,8 @@ class CnbCertificateParameters(PkiBrazilCertificateParameters):
 
     def __init__(self, model=None):
         PkiBrazilCertificateParameters.__init__(self, model)
+        self._format = CertificateFormats.CNB
+
         self.__certificate_type = None
 
         if model is not None:
@@ -754,7 +762,7 @@ class CnbCertificateParameters(PkiBrazilCertificateParameters):
         self.__certificate_type = value
 
     def to_model(self):
-        model = super(self).to_model()
+        model = super(CnbCertificateParameters, self).to_model()
         model['certificateType'] = self.__certificate_type
         return model
 
@@ -763,6 +771,8 @@ class CnbCACertificateParameters(CertificateParameters):
 
     def __init__(self, model=None):
         CertificateParameters.__init__(self, model)
+        self._format = CertificateFormats.CNB_CA
+
         self.__name = None
         self.__cns = None
         self.__street_address = None
@@ -833,7 +843,7 @@ class CnbCACertificateParameters(CertificateParameters):
         if self.__cns is None:
             raise Exception('The "cns" field was not set')
 
-        model = super(self).to_model()
+        model = super(CnbCACertificateParameters, self).to_model()
         model['name'] = self.__name
         model['cns'] = self.__cns
         model['streetAddress'] = self.__street_address
@@ -847,6 +857,8 @@ class SslCertificateParameters(CertificateParameters):
 
     def __init__(self, model=None):
         CertificateParameters.__init__(self, model)
+        self._format = CertificateFormats.SSL
+
         self.__dns_names = None
 
         if model is not None:
@@ -861,7 +873,7 @@ class SslCertificateParameters(CertificateParameters):
         self.__dns_names = value
 
     def to_model(self):
-        model = super(self).to_model()
+        model = super(SslCertificateParameters, self).to_model()
         model['dnsNames'] = self.__dns_names
         return model
 

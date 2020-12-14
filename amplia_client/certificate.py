@@ -19,7 +19,7 @@ class Certificate(BaseCertificate):
         self.__parameters = value
 
     def to_model(self):
-        model = super(self).to_model()
+        model = super(Certificate, self).to_model()
         model['parameters'] = self.__parameters.to_model() if (self.__parameters is not None) else None
         return model
 
