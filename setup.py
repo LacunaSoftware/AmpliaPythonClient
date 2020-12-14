@@ -30,8 +30,8 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     install_requires=[
-        'simplejson==3.17.2',
-        'requests==2.25.0',
-        'six==1.15.0'
+        'simplejson==3.16.0',
+        'requests==2.21.0',
+        'six==1.12.0'
     ],
 )
